@@ -1,20 +1,20 @@
 "use strict";
 
-const fs = require('fs');
 const acorn = require('acorn');
 const escodegen = require('escodegen');
 
-const TEST_FILE = './test.js';
-const testCode = fs.readFileSync(TEST_FILE);
+const astPrettify = require('./src/prettify');
 
-const ast = require('./src/prettify')(acorn.parse(testCode));
+function prettify(code) {
+  const ast = astPrettify(acorn.parse(code), false, true);
 
-const generated = escodegen.generate(ast, {
-  format: {
-    indent: {
-      style: '  '
+  return escodegen.generate(ast, {
+    format: {
+      indent: {
+        style: '  '
+      }
     }
-  }
-});
+  });
+}
 
-fs.writeFileSync(TEST_FILE + '.out.js', generated);
+module.exports = prettify;
