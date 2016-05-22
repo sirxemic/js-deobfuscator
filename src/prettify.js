@@ -64,7 +64,8 @@ const looseExpressionPrettifiers = {
       const result = prettify({
         type: 'IfStatement',
         test: node.left,
-        consequent: consequent
+        consequent: consequent,
+        alternate: null
       });
       return result;
     }
@@ -78,7 +79,8 @@ const looseExpressionPrettifiers = {
       const result = prettify({
         type: 'IfStatement',
         test: test,
-        consequent: consequent
+        consequent: consequent,
+        alternate: null
       });
       return result;
     }
