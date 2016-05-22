@@ -1,5 +1,7 @@
 "use strict";
 
+const acornWalk = require('acorn/dist/walk');
+
 /**
  *  Wrap one or more nodes with a block statement.
  *
@@ -15,6 +17,14 @@ function makeBlockStatement(node) {
     type: 'BlockStatement',
     body: nodes
   });
+}
+
+function findNode(node, test) {
+  if (!node) {
+    return false;
+  }
+
+  return acornWalk.findNodeAt(node, null, null, test);
 }
 
 /**
@@ -147,6 +157,86 @@ const prettifiers = {
     return node;
   },
 
+  ForStatement: function(node) {
+    if (node.init) {
+
+      // Try to keep the for-loop init code minimal and take variable declarations outside.
+      if (node.init.type == 'VariableDeclaration' && node.init.kind == 'var') {
+        const result = [],
+            variableDeclarations = node.init.declarations;
+
+        let outsideDeclarations = [], newDeclarations = [];
+
+        variableDeclarations.forEach(function(declaration) {
+          const identifier = declaration.id.name;
+
+          function test(type, node) {
+            return node && type == 'Identifier' && node.name == identifier;
+          }
+
+          // If the identifier is found in the test or update code, it makes sense to leave it in the
+          // init code.
+          if (!identifier || findNode(node.test, test) || findNode(node.update, test)) {
+            newDeclarations.push(declaration);
+          }
+          else {
+            outsideDeclarations.push(declaration);
+          }
+        });
+
+        if (outsideDeclarations.length > 0) {
+          result.push({
+            type: 'VariableDeclaration',
+            declarations: outsideDeclarations,
+            kind: node.init.kind
+          });
+        }
+
+        let newInit;
+        if (newDeclarations.length > 0) {
+          newInit = {
+            type: 'VariableDeclaration',
+            declarations: newDeclarations,
+            kind: node.init.kind
+          };
+        }
+        else {
+          newInit = null;
+        }
+
+        result.push({
+          type: 'ForStatement',
+          init: newInit,
+          test: node.test,
+          update: node.update,
+          body: node.body
+        });
+
+        return result;
+      }
+      else if (node.init.type == 'SequenceExpression') {
+        const result = [],
+            expressions = node.init.expressions;
+
+        for (let i = 0; i < expressions.length - 1; i++) {
+          result.push(expressions[i]);
+        }
+
+        result.push({
+          type: 'ForStatement',
+          init: expressions[expressions.length - 1],
+          test: node.test,
+          update: node.update,
+          body: node.body
+        });
+
+        return result;
+      }
+    }
+
+    return node;
+  },
+
   Program: function(node) {
     const result = Object.assign({}, node);
     result.body = [];
@@ -179,6 +269,70 @@ const prettifiers = {
     });
 
     return result;
+  },
+
+  BinaryExpression: function(node) {
+    const operatorReverse = {
+      '==': '==',
+      '===': '===',
+      '!=': '!=',
+      '!==': '!==',
+      '>': '<',
+      '>=': '<=',
+      '<': '>',
+      '<=': '>='
+    };
+
+    function shouldSwap(left, right) {
+      function isIdentifier(node) {
+        return node.type == 'Identifier';
+      }
+
+      function isLiteral(node) {
+        return node.type == 'Literal';
+      }
+
+      // A non-modifying unary expression with a literal in it is kinda a literal
+      function isUnaryLiteral(node) {
+        if (isLiteral(node)) return true;
+        if (node.type != 'UnaryExpression') return false;
+        if (!isLiteral(node.argument)) return false;
+        if (['-', '+', '!', '~', 'typeof'].indexOf(node.operator) == -1) return false;
+
+        return true;
+      }
+
+      function isKindaLiteral(node) {
+        return isLiteral(node) || isUnaryLiteral(node);
+      }
+
+      // "undefined" should be at the right
+      if (isIdentifier(left) && left.name == 'undefined') {
+        return true;
+      }
+
+      // If there is one identifier, it should be on the left (in general)
+      if (!isIdentifier(left) && isIdentifier(right)) {
+        return true;
+      }
+
+      // In general literals should be at the right
+      if (isKindaLiteral(node.left) && !isKindaLiteral(node.right)) {
+        return true;
+      }
+
+      return false;
+    }
+
+    if (node.operator in operatorReverse && shouldSwap(node.left, node.right)) {
+      const result = Object.assign({}, node);
+      result.left = node.right;
+      result.right = node.left;
+      result.operator = operatorReverse[node.operator];
+      return result;
+    }
+
+    return node;
   },
 
   UnaryExpression: function(node) {
