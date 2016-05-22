@@ -1,13 +1,13 @@
 module.exports = {
   Identifier: function(name) {
     return {
-      type: "Identifier",
+      type: 'Identifier',
       name: name
     };
   },
   Literal: function(value) {
     return {
-      type: "Literal",
+      type: 'Literal',
       value: value
     };
   }

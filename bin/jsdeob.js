@@ -1,5 +1,5 @@
 #!/usr/bin/env node
-"use strict";
+'use strict';
 
 var path = require('path');
 var fs = require('fs');
@@ -70,19 +70,19 @@ function parseArguments() {
     else if (arg == '--' && !options.file && i + 2 == process.argv.length) {
       options.forceFile = options.file = process.argv[++i];
     }
-    else if (arg == "--ecma3") {
+    else if (arg == '--ecma3') {
       options.ecmaVersion = 3;
     }
-    else if (arg == "--ecma5") {
+    else if (arg == '--ecma5') {
       options.ecmaVersion = 5;
     }
-    else if (arg == "--ecma6") {
+    else if (arg == '--ecma6') {
       options.ecmaVersion = 6;
     }
-    else if (arg == "--ecma7") {
+    else if (arg == '--ecma7') {
       options.ecmaVersion = 7;
     }
-    else if (arg == "--indent" && i + 1 < process.argv.length) {
+    else if (arg == '--indent' && i + 1 < process.argv.length) {
       var indent = parseInt(process.argv[++i]);
       if (isNaN(indent)) {
         help(1);

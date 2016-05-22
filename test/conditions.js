@@ -4,11 +4,11 @@ var util = require('./util');
 
 var astPrettify = require('../lib/prettify');
 
-describe("Conditionals prettification", function() {
+describe('Conditionals prettification', function() {
 
-  describe("Ternary operator", function() {
+  describe('Ternary operator', function() {
 
-    it("is transformed into if-statement", function() {
+    it('is transformed into if-statement', function() {
       var assignmentExpression1 = {
           type: 'AssignmentExpression',
           id: util.Identifier('a'),
@@ -25,8 +25,8 @@ describe("Conditionals prettification", function() {
         type: 'Program',
         body: [
           {
-            type: "ConditionalExpression",
-            test: util.Identifier("test"),
+            type: 'ConditionalExpression',
+            test: util.Identifier('test'),
             consequent: {
               type: 'SequenceExpression',
               expressions: [
@@ -52,8 +52,8 @@ describe("Conditionals prettification", function() {
           type: 'Program',
           body: [
             {
-              type: "IfStatement",
-              test: util.Identifier("test"),
+              type: 'IfStatement',
+              test: util.Identifier('test'),
               consequent: {
                 type: 'BlockStatement',
                 body: [
@@ -88,9 +88,9 @@ describe("Conditionals prettification", function() {
 
   });
 
-  describe("Logical AND-expression", function() {
+  describe('Logical AND-expression', function() {
 
-    it("is transformed into if-statement", function() {
+    it('is transformed into if-statement', function() {
 
       var assignmentExpression1 = {
           type: 'AssignmentExpression',
@@ -102,9 +102,9 @@ describe("Conditionals prettification", function() {
         type: 'Program',
         body: [
           {
-            type: "LogicalExpression",
-            operator: "&&",
-            left: util.Identifier("test"),
+            type: 'LogicalExpression',
+            operator: '&&',
+            left: util.Identifier('test'),
             right: {
               type: 'SequenceExpression',
               expressions: [
@@ -123,8 +123,8 @@ describe("Conditionals prettification", function() {
           type: 'Program',
           body: [
             {
-              type: "IfStatement",
-              test: util.Identifier("test"),
+              type: 'IfStatement',
+              test: util.Identifier('test'),
               consequent: {
                 type: 'BlockStatement',
                 body: [

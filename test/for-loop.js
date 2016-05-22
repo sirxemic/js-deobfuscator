@@ -4,26 +4,26 @@ var util = require('./util');
 
 var astPrettify = require('../lib/prettify');
 
-describe("For-loop prettification", function() {
+describe('For-loop prettification', function() {
 
-  describe("For-loop variable declarations", function() {
+  describe('For-loop variable declarations', function() {
 
-    it("are left in-place.", function() {
+    it('are left in-place.', function() {
       var ast = {
-        type: "ForStatement",
+        type: 'ForStatement',
         init: {
-          type: "VariableDeclaration",
+          type: 'VariableDeclaration',
           kind: 'var',
           declarations: [
             {
-              type: "VariableDeclarator",
-              id: util.Identifier("i"),
+              type: 'VariableDeclarator',
+              id: util.Identifier('i'),
             }
           ]
         },
         test: {
           type: 'BinaryExpression',
-          left: util.Identifier("i"),
+          left: util.Identifier('i'),
           right: util.Literal(10)
         },
         update: null,
@@ -35,22 +35,22 @@ describe("For-loop prettification", function() {
       expect(prettified[0]).to.deep.equal(ast);
     });
 
-    it("are taken outside the for-loop.", function() {
+    it('are taken outside the for-loop.', function() {
       var ast = {
-        type: "ForStatement",
+        type: 'ForStatement',
         init: {
-          type: "VariableDeclaration",
+          type: 'VariableDeclaration',
           kind: 'var',
           declarations: [
             {
-              type: "VariableDeclarator",
-              id: util.Identifier("j"),
+              type: 'VariableDeclarator',
+              id: util.Identifier('j'),
             }
           ]
         },
         test: {
           type: 'BinaryExpression',
-          left: util.Identifier("i"),
+          left: util.Identifier('i'),
           right: util.Literal(10)
         },
         update: null,
@@ -62,21 +62,21 @@ describe("For-loop prettification", function() {
       expect(prettified).to.deep.equal(
         [
           {
-            type: "VariableDeclaration",
+            type: 'VariableDeclaration',
             kind: 'var',
             declarations: [
               {
-                type: "VariableDeclarator",
-                id: util.Identifier("j"),
+                type: 'VariableDeclarator',
+                id: util.Identifier('j'),
               }
             ]
           },
           {
-            type: "ForStatement",
+            type: 'ForStatement',
             init: null,
             test: {
               type: 'BinaryExpression',
-              left: util.Identifier("i"),
+              left: util.Identifier('i'),
               right: util.Literal(10)
             },
             update: null,
@@ -86,30 +86,30 @@ describe("For-loop prettification", function() {
       );
     });
 
-    it("are partially taken outside the for-loop.", function() {
+    it('are partially taken outside the for-loop.', function() {
       var ast = {
-        type: "ForStatement",
+        type: 'ForStatement',
         init: {
-          type: "VariableDeclaration",
+          type: 'VariableDeclaration',
           kind: 'var',
           declarations: [
             {
-              type: "VariableDeclarator",
-              id: util.Identifier("i"),
+              type: 'VariableDeclarator',
+              id: util.Identifier('i'),
             },
             {
-              type: "VariableDeclarator",
-              id: util.Identifier("j"),
+              type: 'VariableDeclarator',
+              id: util.Identifier('j'),
             },
             {
-              type: "VariableDeclarator",
-              id: util.Identifier("k"),
+              type: 'VariableDeclarator',
+              id: util.Identifier('k'),
             }
           ]
         },
         test: {
           type: 'BinaryExpression',
-          left: util.Identifier("i"),
+          left: util.Identifier('i'),
           right: util.Literal(10)
         },
         update: null,
@@ -121,34 +121,34 @@ describe("For-loop prettification", function() {
       expect(prettified).to.deep.equal(
         [
           {
-            type: "VariableDeclaration",
+            type: 'VariableDeclaration',
             kind: 'var',
             declarations: [
               {
-                type: "VariableDeclarator",
-                id: util.Identifier("j"),
+                type: 'VariableDeclarator',
+                id: util.Identifier('j'),
               },
               {
-                type: "VariableDeclarator",
-                id: util.Identifier("k"),
+                type: 'VariableDeclarator',
+                id: util.Identifier('k'),
               }
             ]
           },
           {
-            type: "ForStatement",
+            type: 'ForStatement',
             init: {
-              type: "VariableDeclaration",
+              type: 'VariableDeclaration',
               kind: 'var',
               declarations: [
                 {
-                  type: "VariableDeclarator",
-                  id: util.Identifier("i"),
+                  type: 'VariableDeclarator',
+                  id: util.Identifier('i'),
                 }
               ]
             },
             test: {
               type: 'BinaryExpression',
-              left: util.Identifier("i"),
+              left: util.Identifier('i'),
               right: util.Literal(10)
             },
             update: null,
