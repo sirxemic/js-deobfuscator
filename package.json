@@ -2,7 +2,7 @@
   "name": "js-deobfuscator",
   "version": "0.1.0",
   "description": "Javascript Deobfuscator",
-  "main": "index.js",
+  "main": "lib/index.js",
   "scripts": {
     "test": "./node_modules/.bin/mocha --reporter spec"
   },
