@@ -1,0 +1,29 @@
+{
+  "name": "js-deobfuscator",
+  "version": "0.1.0",
+  "description": "Javascript Deobfuscator",
+  "main": "index.js",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/sirxemic/js-deobfuscator.git"
+  },
+  "keywords": [
+    "deobfuscation",
+    "deminification",
+    "obfuscation",
+    "minification"
+  ],
+  "author": "Pim Schreurs",
+  "license": "MIT",
+  "bugs": {
+    "url": "https://github.com/sirxemic/js-deobfuscator/issues"
+  },
+  "homepage": "https://github.com/sirxemic/js-deobfuscator#readme",
+  "dependencies": {
+    "acorn": "^3.1.0",
+    "escodegen": "^1.8.0"
+  }
+}
