@@ -2,7 +2,7 @@ var expect = require('chai').expect;
 
 var util = require('./util');
 
-var astPrettify = require('../src/prettify');
+var astPrettify = require('../lib/prettify');
 
 describe("Conditionals prettification", function() {
 
